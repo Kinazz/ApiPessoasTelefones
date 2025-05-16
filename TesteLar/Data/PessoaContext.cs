@@ -1,30 +1,22 @@
 using Microsoft.EntityFrameworkCore;
 using Pessoa.Modelos;
 
-
-namespace Pessoa.Data;
-
-public class PessoaContext : DbContext
+namespace Pessoa.Data
 {
-   public  DbSet<PessoaModelo> Pessoas { get; set; }   
-   public  DbSet<TelefoneModelo> Telefones { get; set; }   
-
-
-
-   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    public class PessoaContext : DbContext
     {
-       optionsBuilder.UseSqlite("Data Source=Pessoa.sqlite");
-       base.OnConfiguring(optionsBuilder);
-    }
+        public PessoaContext(DbContextOptions<PessoaContext> options) : base(options) { }
 
-    
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<PessoaModelo>()
-            .HasMany(p => p.Telefones)
-            .WithOne(t => t.Pessoa)
-            .HasForeignKey(t => t.PessoaId);
+        public DbSet<PessoaModelo> Pessoas { get; set; }
+        public DbSet<TelefoneModelo> Telefones { get; set; }
 
-        base.OnModelCreating(modelBuilder);
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<PessoaModelo>()
+                .HasMany(p => p.Telefones)
+                .WithOne(t => t.Pessoa)
+                .HasForeignKey(t => t.PessoaId)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }

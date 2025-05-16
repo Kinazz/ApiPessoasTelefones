@@ -2,62 +2,57 @@ using Microsoft.EntityFrameworkCore;
 using Pessoa.Data;
 using Pessoa.Modelos;
 
-
-namespace Pessoa.Routes;
-
+namespace Pessoa.Routes
+{
     public static class PessoaRoute
     {
-        public static void MapPessoaRoute(this WebApplication app)
+        public static void MapPessoaRota(this WebApplication app)
         {
             var rota = app.MapGroup("/Pessoa");
 
-            rota.MapPost("/Adicionar Nova Pessoa", async (PessoaRequest req, PessoaContext context) =>
+            rota.MapGet("/ListarPessoas", async (PessoaContext context) =>
             {
-                var pessoa = new PessoaModelo(req.Nome, req.CPF, req.DataNascimento, req.Ativo);
-                await context.AddAsync(pessoa);
-                await context.SaveChangesAsync();
-            }); 
-
-            rota.MapGet("/Listar Pessoas", async (PessoaContext context) =>
-            {
-                var pessoa = await context.Pessoas.ToListAsync();
-                return Results.Ok(pessoa);
+                var pessoas = await context.Pessoas.Include(p => p.Telefones).ToListAsync();
+                return Results.Ok(pessoas);
             });
 
-            rota.MapPut("/Atualizar Pessoa/{id:guid}", async (Guid id, PessoaRequest req, PessoaContext context) =>
+            rota.MapGet("/Pesquisar por/{id:guid}", async (Guid id, PessoaContext context) =>
+            {
+                var pessoa = await context.Pessoas.Include(p => p.Telefones).FirstOrDefaultAsync(p => p.Id == id);
+                return pessoa is null ? Results.NotFound("Pessoa não encontrada.") : Results.Ok(pessoa);
+            });
+
+            rota.MapPost("/CriarPessoa", async (PessoaModelo pessoa, PessoaContext context) =>
+            {
+                pessoa.Id = Guid.NewGuid();
+                context.Pessoas.Add(pessoa);
+                await context.SaveChangesAsync();
+                return Results.Created($"/Pessoa/{pessoa.Id}", pessoa);
+            });
+
+            rota.MapPut("/EditarPessoa/{id:guid}", async (Guid id, PessoaModelo pessoaEditada, PessoaContext context) =>
             {
                 var pessoa = await context.Pessoas.FindAsync(id);
-                if (pessoa is null)
-                    return Results.NotFound();
+                if (pessoa is null) return Results.NotFound("Pessoa não encontrada.");
 
-                pessoa.Atualizar(req.Nome, req.CPF, req.DataNascimento, req.Ativo);
+                pessoa.Nome = pessoaEditada.Nome;
+                pessoa.Cpf = pessoaEditada.Cpf;
+                pessoa.DataNascimento = pessoaEditada.DataNascimento;
+                pessoa.Ativo = pessoaEditada.Ativo;
 
                 await context.SaveChangesAsync();
                 return Results.Ok(pessoa);
             });
 
-            rota.MapDelete("/Deletar Pessoa/{id:guid}", async (Guid id, PessoaContext context) =>
+            rota.MapDelete("/DeletarPessoa/{id:guid}", async (Guid id, PessoaContext context) =>
             {
                 var pessoa = await context.Pessoas.FindAsync(id);
-                if (pessoa is null)
-                    return Results.NotFound();
+                if (pessoa is null) return Results.NotFound("Pessoa não encontrada.");
 
-                context.Remove(pessoa);
+                context.Pessoas.Remove(pessoa);
                 await context.SaveChangesAsync();
-                return Results.Ok(pessoa);
+                return Results.Ok("Pessoa removida com sucesso.");
             });
-
-            rota.MapPatch("/Desativar Pessoa/{id:guid}", async (Guid id, PessoaContext context) =>
-            {
-                var pessoa = await context.Pessoas.FindAsync(id);
-                if (pessoa is null)
-                    return Results.NotFound();
-
-                pessoa.Ativo = !pessoa.Ativo;
-                await context.SaveChangesAsync();
-                return Results.Ok(pessoa);
-            });
- 
-
         }
     }
+}

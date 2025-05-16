@@ -1,30 +1,30 @@
+using Microsoft.EntityFrameworkCore;
 using Pessoa.Data;
 using Pessoa.Routes;
-using Telefone.Data;
-using Telefone.Routes;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+// Configurar conexão com SQLite (ajuste se usar outro banco)
+builder.Services.AddDbContext<PessoaContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddEndpointsApiExplorer(); // Adiciona suporte para endpoints minimal API
-builder.Services.AddSwaggerGen();  
-builder.Services.AddScoped<PessoaContext>();
+// Adicionar Swagger e outros serviços
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Middleware
 if (app.Environment.IsDevelopment())
 {
-
-    app.UseSwagger();             // Ativa o middleware Swagger
-    app.UseSwaggerUI();   
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
-
-app.MapPessoaRoute();
-app.MapTelefoneRoute();
-
 app.UseHttpsRedirection();
+
+// Mapear rotas
+app.MapPessoaRota();
+app.MapTelefoneRota();
+
 app.Run();

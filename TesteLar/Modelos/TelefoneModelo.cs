@@ -1,11 +1,21 @@
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+
 namespace Pessoa.Modelos;
 
 public class TelefoneModelo
 {
-    public Guid Id { get; set; } // Chave primária obrigatória
+        [Key]
+        public Guid Id { get; set; }
 
-    public string Numero { get; set; } = string.Empty;
-    public string Tipo { get; set; } = string.Empty; // Ex: "Celular", "Residencial", etc.
-    public Guid PessoaId { get; set; }
-    public PessoaModelo? Pessoa { get; set; }
+        [Required]
+        public string Numero { get; set; } = string.Empty;
+
+        [Required]
+        public string Tipo { get; set; } = string.Empty;
+
+        public Guid PessoaId { get; set; }
+
+        [JsonIgnore]
+        public PessoaModelo? Pessoa { get; set; }
 }

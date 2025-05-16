@@ -26,7 +26,7 @@ namespace TesteLar.Migrations
                     b.Property<bool>("Ativo")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("CPF")
+                    b.Property<string>("Cpf")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -63,7 +63,7 @@ namespace TesteLar.Migrations
 
                     b.HasIndex("PessoaId");
 
-                    b.ToTable("TelefoneModelo");
+                    b.ToTable("Telefones");
                 });
 
             modelBuilder.Entity("Pessoa.Modelos.TelefoneModelo", b =>
