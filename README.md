@@ -93,7 +93,11 @@ Os endpoints de exportação retornam arquivos CSV com os dados de pessoas ou lo
 ## Como Executar
 
 1. Configure a string de conexão do banco de dados no `appsettings.json`.
-2. Execute as migrações do Entity Framework para criar as tabelas.
-3. Rode o projeto e acesse o Swagger em `/swagger` para testar os endpoints.
+2. `{
+  "ConnectionStrings": {
+    "DefaultConnection": "Data Source=NOME DB.db"
+  }`  
+3. Execute as migrações do Entity Framework para criar as tabelas.(Comando `dotnet ef migrations add`).
+4. Rode o projeto e acesse o Swagger em `/swagger` para testar os endpoints.
 
 ---
