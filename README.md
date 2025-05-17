@@ -42,6 +42,20 @@ Esta API foi desenvolvida para gerenciar pessoas e seus telefones, permitindo ca
 ## Exemplos de Endpoints
 
 ### Pessoas
+```json
+{
+  "nome": "João da Silva",
+  "cpf": "12345678909",
+  "dataNascimento": "1990-01-01T00:00:00Z",
+  "ativo": true,
+  "telefones": [
+    {
+      "numero": "11999999999",
+      "tipo": "Celular"
+    }
+  ]
+}
+```
 - `GET /people` – Lista todas as pessoas.
 - `GET /people/{id}` – Busca pessoa por ID.
 - `POST /people` – Cria uma nova pessoa.
@@ -52,6 +66,12 @@ Esta API foi desenvolvida para gerenciar pessoas e seus telefones, permitindo ca
 - `GET /people/export/csv` – Exporta pessoas em CSV.
 
 ### Telefones
+  ```json
+  {
+    "numero": "11988887777",
+    "tipo": "Residencial"
+  }
+  ```
 - `GET /phones` – Lista todos os telefones.
 - `POST /phones/{personId}` – Adiciona telefone para uma pessoa.
 - `PUT /phones/{phoneId}` – Edita telefone.
@@ -125,5 +145,9 @@ Os endpoints de exportação retornam arquivos CSV com os dados de pessoas ou lo
 # 1.0.3
 
 - Adiciconado arquivo .gitignore
+
+# 1.0.4
+
+
 
 
