@@ -19,7 +19,7 @@ namespace ApiPessoasTelefones.Routes
                 var people = await context.Pessoas.Include(p => p.Telefones).ToListAsync();
                 return Results.Ok(people);
             })
-            .WithName("ListarPessoas") // Título autoexplicativo para o Swagger
+            .WithName("ListarPessoas")
             .WithSummary("Lista todas as pessoas cadastradas");
 
             // Busca uma pessoa pelo ID

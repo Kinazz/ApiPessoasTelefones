@@ -12,6 +12,7 @@ builder.Services.AddDbContext<PessoaContext>(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 var app = builder.Build();
 
 // Middleware de desenvolvimento
@@ -27,5 +28,12 @@ app.UseHttpsRedirection();
 app.MapPessoaRoutes();
 app.MapTelefoneRoutes();
 app.MapPessoaAuditLogRoutes();
+
+// Cria o banco de dados e aplica migrações pendentes
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<PessoaContext>();
+    db.Database.Migrate();
+}
 
 app.Run();

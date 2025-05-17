@@ -35,7 +35,7 @@ namespace ApiPessoasTelefones.Routes
 
                 foreach (var log in logs)
                 {
-                    // Atenção: DadosAntigos e DadosNovos podem conter vírgulas, trate conforme necessário
+                    
                     sb.AppendLine($"\"{log.Id}\",\"{log.PessoaId}\",\"{log.Acao}\",\"{log.DataHora:yyyy-MM-dd HH:mm:ss}\",\"{log.DadosAntigos}\",\"{log.DadosNovos}\"");
                 }
 

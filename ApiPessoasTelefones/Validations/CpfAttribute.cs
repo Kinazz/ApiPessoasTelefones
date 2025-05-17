@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ApiPessoasTelefones.Validations;
 
-// Validador customizado para CPF
+// Validador para CPF
 public class CpfAttribute : ValidationAttribute
 {
     public override bool IsValid(object? value)
