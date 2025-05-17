@@ -122,4 +122,8 @@ Os endpoints de exportação retornam arquivos CSV com os dados de pessoas ou lo
 
 - Removida versao .exe na pasta "ApiPessoasTelefones\bin\Release\net9.0\win-x64\publish\ApiPessoasTelefones.exe"
 
+# 1.0.3
+
+- Adiciconado arquivo .gitignore
+
 
